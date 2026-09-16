@@ -5,6 +5,7 @@ import type { Skill } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import BrandLogo from "@/components/icons/BrandLogo";
+import { useInViewOnce } from "@/lib/useInView";
 
 type Grouped = { name: string; items: Skill[] };
 
@@ -24,13 +25,22 @@ function groupSkills(): Grouped[] {
  * skill name fades in beneath the logo (and vanishes when the cursor leaves).
  */
 function SkillTile({ skill }: { skill: Skill }) {
+  const { ref, inView } = useInViewOnce();
+
   return (
-    <div className="group flex min-h-28 flex-col items-center justify-center gap-3 rounded-2xl border border-border-subtle bg-surface-1/40 px-4 py-5 transition-colors duration-300 hover:border-border-strong hover:bg-surface-1 sm:min-h-32 sm:py-6">
+    <div
+      ref={ref}
+      tabIndex={0}
+      className={
+        "skill-tile group flex min-h-28 flex-col items-center justify-center gap-3 rounded-2xl border border-border-subtle bg-surface-1/40 px-4 py-5 transition-colors duration-300 hover:border-border-strong hover:bg-surface-1 group-active:border-border-strong group-active:bg-surface-1 group-focus:border-border-strong group-focus:bg-surface-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--text-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] sm:min-h-32 sm:py-6" +
+        (inView ? " revealed" : "")
+      }
+    >
       <BrandLogo
         name={skill.name}
-        className="h-12 w-12 shrink-0 grayscale opacity-75 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:scale-110 group-hover:grayscale-0 group-hover:opacity-100 sm:h-16 sm:w-16"
+        className="h-12 w-12 shrink-0 grayscale opacity-75 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:scale-110 group-hover:grayscale-0 group-hover:opacity-100 group-active:-translate-y-0.5 group-active:scale-110 group-active:grayscale-0 group-active:opacity-100 group-focus:-translate-y-0.5 group-focus:scale-110 group-focus:grayscale-0 group-focus:opacity-100 sm:h-16 sm:w-16"
       />
-      <span className="pointer-events-none text-xs font-medium text-ink opacity-0 -translate-y-1 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 sm:text-sm">
+      <span className="pointer-events-none text-xs font-medium text-ink opacity-0 -translate-y-1 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-active:translate-y-0 group-active:opacity-100 group-focus:translate-y-0 group-focus:opacity-100 sm:text-sm">
         {skill.name}
       </span>
     </div>

@@ -195,10 +195,6 @@ body {
   stroke: rgba(5, 5, 8, 0.55);
 }
 
-.group-project:hover .project-pattern {
-  opacity: 1;
-}
-
 /* Soft dark glow behind text so it stays sharp over the pattern */
 .group-project .text-ink,
 .group-project .text-muted,
@@ -207,9 +203,58 @@ body {
   text-shadow: 0 1px 3px rgba(5, 5, 8, 0.9), 0 2px 14px rgba(5, 5, 8, 0.65);
 }
 
+/*
+ * Active states: the pattern + text brightening fire on:
+ *  - desktop hover        (hover:hover)
+ *  - tap/click (:active)  (touch)
+ *  - focus (:focus-within, keyboard + tap on links)
+ */
+.group-project:hover .project-pattern,
+.group-project:active .project-pattern,
+.group-project:focus-within .project-pattern {
+  opacity: 1;
+}
+
 .group-project:hover .text-muted,
-.group-project:hover .text-faint {
+.group-project:hover .text-faint,
+.group-project:active .text-muted,
+.group-project:active .text-faint,
+.group-project:focus-within .text-muted,
+.group-project:focus-within .text-faint {
   color: rgba(255, 255, 255, 0.82);
+}
+
+/*
+ * Touch devices (no hover): reveal the tint + brightened text as the card
+ * scrolls into view, so scrolling up/down shows the colors even without a tap.
+ */
+@media (hover: none) {
+  .group-project.revealed .project-pattern {
+    opacity: 1;
+  }
+  .group-project.revealed .project-thumb {
+    border-color: var(--border-strong);
+    filter: brightness(1.1);
+  }
+  .group-project.revealed .text-muted,
+  .group-project.revealed .text-faint {
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  /* Skill tiles: reveal brand color + name as they scroll into view */
+  .skill-tile.revealed {
+    border-color: var(--border-strong);
+    background-color: var(--surface-1);
+  }
+  .skill-tile.revealed svg {
+    filter: grayscale(0);
+    opacity: 1;
+    transform: translateY(-2px) scale(1.1);
+  }
+  .skill-tile.revealed span {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ------------------------------------------------------------------ *

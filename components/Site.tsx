@@ -9,7 +9,7 @@ import Projects from "@/components/Projects";
 import Myself from "@/components/Myself";
 import ExplorerLog from "@/components/ExplorerLog";
 import Skills from "@/components/Skills";
-import Field from "@/components/Field";
+import CursorGazeVideo from "@/components/CursorGazeVideo";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -34,7 +34,7 @@ export default function Site() {
         <Myself />
         <ExplorerLog />
         <Skills />
-        <Field />
+        <CursorGazeVideo />
         <About />
         <Contact />
       </main>

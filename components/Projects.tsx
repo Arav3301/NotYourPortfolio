@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { projects } from "@/lib/data";
 import type { Project } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
+import { useInViewOnce } from "@/lib/useInView";
 
 type RowProps = { project: Project };
 
@@ -17,7 +17,7 @@ type RowProps = { project: Project };
  * with "View the mess ↗" via closest().
  */
 function ProjectRow({ project }: RowProps) {
-  const [active, setActive] = useState(false);
+  const { ref, inView } = useInViewOnce();
 
   const displayBody = (
     <>
@@ -55,11 +55,7 @@ function ProjectRow({ project }: RowProps) {
       {/* Right: thumbnail (brightens on hover) */}
       <div className="w-full lg:w-[48%]">
         <div
-          className={`relative aspect-[16/10] w-full overflow-hidden rounded-xl border bg-surface-1 ${
-            active
-              ? "border-border-strong brightness-[1.1]"
-              : "border-border-medium brightness-100"
-          } transition-[border-color,brightness] duration-300 ease-out`}
+          className="project-thumb relative aspect-[16/10] w-full overflow-hidden rounded-xl border bg-surface-1 border-border-medium brightness-100 transition-[border-color,brightness] duration-300 ease-out group-hover:border-border-strong group-hover:brightness-[1.1] group-active:border-border-strong group-active:brightness-[1.1] group-focus-within:border-border-strong group-focus-within:brightness-[1.1]"
         >
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
             <span className="font-space text-xl font-semibold tracking-tight text-ink/70 sm:text-2xl">
@@ -92,15 +88,15 @@ function ProjectRow({ project }: RowProps) {
 
   return (
     <div
-      onMouseEnter={() => setActive(true)}
-      onMouseLeave={() => setActive(false)}
+      ref={ref}
       data-cursor-label={clickable ? "Visit Project ↗" : undefined}
       style={{ ["--ptint" as string]: project.tint }}
       className={
-        "group-project relative overflow-hidden " +
+        "group group-project relative overflow-hidden " +
+        (inView ? "revealed " : "") +
         (clickable
-          ? "rounded-xl border border-transparent transition-[transform,border-color] duration-300 ease-out hover:scale-[1.02] hover:border-border-subtle"
-          : "rounded-xl border border-transparent transition-colors duration-300 hover:border-border-subtle")
+          ? "rounded-xl border border-transparent transition-[transform,border-color] duration-300 ease-out hover:scale-[1.02] focus-within:scale-[1.02] focus-within:border-border-subtle active:scale-[1.02]"
+          : "rounded-xl border border-transparent transition-colors duration-300")
       }
     >
       <div aria-hidden="true" className="project-pattern">
